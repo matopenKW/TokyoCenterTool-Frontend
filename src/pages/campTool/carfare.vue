@@ -83,7 +83,7 @@ export default {
         },
         async clickUpdateBtn(index){
             let carfare = this.carfareList[index]
-            this.$axios.$get('/update',{
+            this.$axios.$get('/carfare/update',{
                 params: carfare
             }).then(response => {
                 alert('更新しました。')
@@ -95,7 +95,7 @@ export default {
         async clickRegistBtn(index){
             let carfare = this.carfareList[index]
 
-            this.$axios.$get('/regist',{
+            this.$axios.$get('/carfare/regist',{
                 params: carfare
             }).then(response => {
                 alert('登録しました。')
@@ -114,7 +114,7 @@ export default {
         window.addEventListener('resize', this.handleResize)
 
         this.$nextTick(function () {
-            this.$axios.$get('/getCarfare',{
+            this.$axios.$get('/carfare/select',{
                 params:{}
             })
             .then(response => {
