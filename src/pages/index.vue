@@ -1,72 +1,119 @@
 <template>
-  <div class="container">
-    <div>
-      <logo />
-      <h1 class="title">
-        PortfolioView
-      </h1>
-      <h2 class="subtitle">
-        My top-notch Nuxt.js Test
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+    <div id="login-form" class="login">
+        <h2 class="login-header">ログイン</h2>
+        <form class="login-container">
+            <p><input type="email" placeholder="Email"></p>
+            <p><input type="password" placeholder="Password"></p>
+            <p><input type="button" value="Log in" @click="submitLogin"></p>
+            <p><input type="button" value="Gest User" @click="submitGetUser"></p>
+        </form>
     </div>
-  </div>
 </template>
-
 <script>
-import Logo from '~/components/Logo.vue'
 
 export default {
-  components: {
-    Logo
-  }
+    layout ({ store }) {
+        return 'login'
+    },
+    data: function() {
+        return {
+            files: []
+        }
+    },
+    mounted: function () {
+        this.$nextTick(function () {
+            console.log('load')
+        })
+    },
+    methods: {
+        async submitLogin(){
+            alert('click Login')
+        },
+        async submitGetUser(){
+            window.location.href = '/campTool/top'
+        }
+    }
 }
+
 </script>
 
 <style>
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
+#login-form {
+    margin-top: 7vh;
+}
+
+.login {
+  width: 400px;
+  margin: 16px auto;
+  font-size: 16px;
+}
+
+/* Reset top and bottom margins from certain elements */
+.login-header,
+.login p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.login-header {
+  background: #28d;
+  padding: 20px;
+  font-size: 1.4em;
+  font-weight: normal;
   text-align: center;
+  text-transform: uppercase;
+  color: #fff;
 }
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+.login-container {
+  background: #ebebeb;
+  padding: 12px;
+}
+
+/* Every row inside .login-container is defined with p tags */
+.login p {
+  padding: 12px;
+}
+
+.login input {
+  box-sizing: border-box;
   display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
+  width: 100%;
+  border-width: 1px;
+  border-style: solid;
+  padding: 16px;
+  outline: 0;
+  font-family: inherit;
+  font-size: 0.95em;
 }
 
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
+.login input[type="email"],
+.login input[type="password"] {
+  background: #fff;
+  border-color: #bbb;
+  color: #555;
 }
 
-.links {
-  padding-top: 15px;
+/* Text fields' focus effect */
+.login input[type="email"]:focus,
+.login input[type="password"]:focus {
+  border-color: #888;
+}
+
+.login input[type="button"] {
+  background: #28d;
+  border-color: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.login input[type="button"]:hover {
+  background: #17c;
+}
+
+/* Buttons' focus effect */
+.login input[type="button"]:focus {
+  border-color: #05a;
 }
 </style>

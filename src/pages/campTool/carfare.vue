@@ -160,7 +160,6 @@ export default {
                 alert('データの取得に失敗しました。')
                 console.log(err)
             })
-            .finally(() => console.log('finally'))
         })
     }
 }
