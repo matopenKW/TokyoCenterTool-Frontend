@@ -30,7 +30,7 @@ export default {
             alert('click Login')
         },
         async submitGetUser(){
-            window.location.href = './campTool/top'
+            window.location.href = './top'
         }
     }
 }

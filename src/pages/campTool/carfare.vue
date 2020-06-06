@@ -85,7 +85,8 @@ export default {
                     Date: sysDate.format('YYYYMMDD'),
                     StartPoint: '',
                     EndPoint: '',
-                    Price: 0
+                    Price: 0,
+                    isNewRow: true
             })
         },
         async clickRow(index){
@@ -114,6 +115,7 @@ export default {
             }).then(response => {
                 alert('登録しました。')
                 carfare.isNewRow = false
+                carfare.SeqNo = response.SeqNo
             })
             .catch(err => {
                 alert('登録に失敗しました。')
