@@ -18,13 +18,20 @@
                     <tr>
                         <td class="date-head">日付</td>
                         <th class="route-head" scope="col">内容</th>
-                        <th class="price-head" scope="col">価格(月額)</th>
+                        <th class="price-head" scope="col">料金</th>
                         <th class="btn-area-head" scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(carfare, index) in carfareList" :key="carfare.SeqNo" class="carfareList" @click="clickRow(index)">
-                        <th class="date">{{ carfare.Date | format-date }}</th>
+                        <th class="date" @click="clickDate(index)">
+                            <span v-if="selectDateIndex == index">
+                                <input type="text" v-model="carfare.Date">
+                            </span>
+                            <span v-else>
+                                {{ carfare.Date | format-date }}
+                            </span>
+                        </th>
                         <td v-show="verticalMode || selectIndex == index" data-label="内容" class="route">
                             <div class="row">
                                 <div class="col-md-12 col-lg-5">
@@ -36,13 +43,15 @@
                                 </div>
                             </div>
                         </td>
-                        <td v-show="verticalMode || selectIndex == index" data-label="価格" class="price">{{ carfare.Price }}</td>
+                        <td v-show="verticalMode || selectIndex == index" data-label="価格" class="price">
+                            <input type="text" v-model="carfare.Price">
+                        </td>
                         <td v-show="verticalMode || selectIndex == index" data-label="" class="btn-area">
                             <span v-if="carfare.isNewRow">
-                                <input type="button" class="btn btn-success" value="更新" @click="clickUpdateBtn(index)">
+                                <input type="button" class="btn btn-primary" value="登録" @click="clickRegistBtn(index)">
                             </span>
                             <span v-else>
-                                <input type="button" class="btn btn-primary" value="登録" @click="clickRegistBtn(index)">
+                                <input type="button" class="btn btn-success" value="更新" @click="clickUpdateBtn(index)">
                             </span>
                             <input type="button" class="btn btn-danger" value="削除" @click="clickDeleteBtn(index)">
                         </td>
@@ -62,7 +71,8 @@ export default {
         return {
             carfareList: [],
             verticalMode: true,
-            selectIndex: 1
+            selectIndex: 0,
+            selectDateIndex: -1
         }
     },
     methods: {
@@ -81,6 +91,9 @@ export default {
         async clickRow(index){
             this.selectIndex = index
         },
+        async clickDate(index){
+            this.selectDateIndex = index
+        },
         async clickUpdateBtn(index){
             let carfare = this.carfareList[index]
             this.$axios.$get('/carfare/update',{
@@ -89,6 +102,7 @@ export default {
                 alert('更新しました。')
             })
             .catch(err => {
+                alert('更新に失敗しました。')
                 console.log(err)
             })
         },
@@ -102,11 +116,28 @@ export default {
                 carfare.isNewRow = false
             })
             .catch(err => {
+                alert('登録に失敗しました。')
                 console.log(err)
             })
         },
         async clickDeleteBtn(index){
-            this.carfareList.splice(index, 1)
+
+            let carfare = this.carfareList[index]
+            if (!carfare.isNewRow) {
+                this.$axios.$get('/carfare/delete',{
+                    params: carfare
+                }).then(response => {
+                    alert('削除しました。')
+                    this.carfareList.splice(index, 1)
+                })
+                .catch(err => {
+                    alert('削除に失敗しました。')
+                    console.log(err)
+                })
+            }　else {
+                this.carfareList.splice(index, 1)
+            }
+
         }
     },
     mounted: function(){
@@ -120,10 +151,11 @@ export default {
             .then(response => {
                 this.carfareList = response
                 this.carfareList.forEach(element => {
-                    element.isNewRow = true
+                    element.isNewRow = false
                 });
             })
             .catch(err => {
+                alert('データの取得に失敗しました。')
                 console.log(err)
             })
             .finally(() => console.log('finally'))
@@ -184,12 +216,21 @@ table .btn-area-head {
     width: 200px;
 }
 
+table .date input {
+    width: 90px;
+}
+
 table .route input{
     width: 100%;
 }
 
 table .route .arrow:after {
     content: '→';
+}
+
+table .price input {
+    width: 75px;
+    text-align: right;
 }
 
 @media screen and (max-width: 992px) {
